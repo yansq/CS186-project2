@@ -28,8 +28,22 @@ public enum LockType {
             throw new NullPointerException("null lock type");
         }
         // TODO(proj4_part1): implement
-
-        return false;
+        switch (a) {
+            case NL:
+                return true;
+            case IS:
+                return b != LockType.X;
+            case IX:
+                return b == LockType.NL || b == LockType.IS || b == LockType.IX;
+            case S:
+                return b == LockType.NL || b == LockType.IS || b == LockType.S;
+            case SIX:
+                return b == LockType.NL || b == LockType.IS;
+            case X:
+                return b == LockType.NL;
+            default:
+                throw new NullPointerException("bad lock type");
+        }
     }
 
     /**
@@ -60,8 +74,21 @@ public enum LockType {
             throw new NullPointerException("null lock type");
         }
         // TODO(proj4_part1): implement
-
-        return false;
+        switch (parentLockType) {
+            case NL:
+            case S:
+            case X:
+                return childLockType == LockType.NL;
+            case IS:
+                return childLockType == LockType.NL || childLockType == LockType.S || childLockType == LockType.IS;
+            case IX:
+                return true;
+            case SIX:
+                return childLockType == LockType.NL || childLockType == LockType.X || childLockType == LockType.IX
+                        || childLockType == LockType.SIX;
+            default:
+                throw new NullPointerException("bad lock type");
+        }
     }
 
     /**
@@ -75,8 +102,23 @@ public enum LockType {
             throw new NullPointerException("null lock type");
         }
         // TODO(proj4_part1): implement
-
-        return false;
+        switch (substitute) {
+            case NL:
+                return required == LockType.NL;
+            case IS:
+                return required == LockType.NL || required == LockType.IS;
+            case IX:
+                return required == LockType.NL || required == LockType.IS || required == LockType.IX;
+            case S:
+                return required == LockType.NL || required == LockType.IS || required == LockType.S;
+            case SIX:
+                return required == LockType.NL || required == LockType.IS || required == LockType.S
+                        || required == LockType.IX;
+            case X:
+                return true;
+            default:
+                throw new NullPointerException("bad lock type");
+        }
     }
 
     /**

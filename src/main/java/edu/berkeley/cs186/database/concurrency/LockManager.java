@@ -31,13 +31,17 @@ import java.util.*;
  * processed.
  */
 public class LockManager {
-    // transactionLocks is a mapping from transaction number to a list of lock
-    // objects held by that transaction.
+    /**
+     * transactionLocks is a mapping from transaction number to a list of lock
+     * objects held by that transaction.
+     */
     private Map<Long, List<Lock>> transactionLocks = new HashMap<>();
 
-    // resourceEntries is a mapping from resource names to a ResourceEntry
-    // object, which contains a list of Locks on the object, as well as a
-    // queue for requests on that resource.
+    /**
+     * resourceEntries is a mapping from resource names to a ResourceEntry
+     * object, which contains a list of Locks on the object, as well as a
+     * queue for requests on that resource.
+     */
     private Map<ResourceName, ResourceEntry> resourceEntries = new HashMap<>();
 
     // A ResourceEntry contains the list of locks on a resource, as well as
@@ -59,6 +63,11 @@ public class LockManager {
          */
         public boolean checkCompatible(LockType lockType, long except) {
             // TODO(proj4_part1): implement
+//            List<Lock> lockList = transactionLocks.getOrDefault(except, new ArrayList<Lock>());
+//            for (Lock lock : lockList) {
+//                if ()
+//
+//            }
             return false;
         }
 
