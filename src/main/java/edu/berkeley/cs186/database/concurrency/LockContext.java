@@ -18,27 +18,41 @@ public class LockContext {
     // You should not remove any of these fields. You may add additional
     // fields/methods as you see fit.
 
-    // The underlying lock manager.
+    /**
+     * The underlying lock manager.
+     */
     protected final LockManager lockman;
 
-    // The parent LockContext object, or null if this LockContext is at the top of the hierarchy.
+    /**
+     * The parent LockContext object, or null if this LockContext is at the top of the hierarchy.
+     */
     protected final LockContext parent;
 
-    // The name of the resource this LockContext represents.
+    /**
+     * The name of the resource this LockContext represents.
+     */
     protected ResourceName name;
 
-    // Whether this LockContext is readonly. If a LockContext is readonly, acquire/release/promote/escalate should
-    // throw an UnsupportedOperationException.
+    /**
+     * Whether this LockContext is readonly. If a LockContext is readonly, acquire/release/promote/escalate should
+     * throw an UnsupportedOperationException.
+     */
     protected boolean readonly;
 
-    // A mapping between transaction numbers, and the number of locks on children of this LockContext
-    // that the transaction holds.
+    /**
+     * A mapping between transaction numbers, and the number of locks on children of this LockContext
+     * that the transaction holds.
+     */
     protected final Map<Long, Integer> numChildLocks;
 
-    // You should not modify or use this directly.
+    /**
+     * You should not modify or use this directly.
+     */
     protected final Map<String, LockContext> children;
 
-    // Whether or not any new child LockContexts should be marked readonly.
+    /**
+     * Whether or not any new child LockContexts should be marked readonly.
+     */
     protected boolean childLocksDisabled;
 
     public LockContext(LockManager lockman, LockContext parent, String name) {

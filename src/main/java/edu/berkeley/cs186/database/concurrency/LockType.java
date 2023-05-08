@@ -4,12 +4,18 @@ package edu.berkeley.cs186.database.concurrency;
  * Utility methods to track the relationships between different lock types.
  */
 public enum LockType {
-    S,   // shared
-    X,   // exclusive
-    IS,  // intention shared
-    IX,  // intention exclusive
-    SIX, // shared intention exclusive
-    NL;  // no lock held
+    // shared
+    S,
+    // exclusive
+    X,
+    // intention shared
+    IS,
+    // intention exclusive
+    IX,
+    // shared intention exclusive
+    SIX,
+    // no lock held
+    NL;
 
     /**
      * This method checks whether lock types A and B are compatible with
