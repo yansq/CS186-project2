@@ -54,7 +54,9 @@ public class SNLJOperator extends JoinOperator {
         public SNLJIterator() {
             super();
             this.leftSourceIterator = getLeftSource().iterator();
-            if (leftSourceIterator.hasNext()) leftRecord = leftSourceIterator.next();
+            if (leftSourceIterator.hasNext()) {
+                leftRecord = leftSourceIterator.next();
+            }
 
             this.rightSourceIterator = getRightSource().backtrackingIterator();
             this.rightSourceIterator.markNext();
@@ -90,13 +92,17 @@ public class SNLJOperator extends JoinOperator {
 
         @Override
         public boolean hasNext() {
-            if (this.nextRecord == null) this.nextRecord = fetchNextRecord();
+            if (this.nextRecord == null) {
+                this.nextRecord = fetchNextRecord();
+            }
             return this.nextRecord != null;
         }
 
         @Override
         public Record next() {
-            if (!this.hasNext()) throw new NoSuchElementException();
+            if (!this.hasNext()) {
+                throw new NoSuchElementException();
+            }
             Record nextRecord = this.nextRecord;
             this.nextRecord = null;
             return nextRecord;

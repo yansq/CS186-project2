@@ -87,6 +87,13 @@ public class BNLJOperator extends JoinOperator {
          */
         private void fetchNextLeftBlock() {
             // TODO(proj3_part1): implement
+            if (!this.leftSourceIterator.hasNext()) {
+                return;
+            }
+            leftBlockIterator = getBlockIterator(this.leftSourceIterator, getLeftSource().getSchema()
+                    , numBuffers - 2);
+            leftBlockIterator.markNext();
+            leftRecord = leftBlockIterator.next();
         }
 
         /**
@@ -101,6 +108,12 @@ public class BNLJOperator extends JoinOperator {
          */
         private void fetchNextRightPage() {
             // TODO(proj3_part1): implement
+            if (!this.rightSourceIterator.hasNext()) {
+                return;
+            }
+            rightPageIterator = getBlockIterator(this.rightSourceIterator, getRightSource().getSchema()
+                    , 1);
+            rightPageIterator.markNext();
         }
 
         /**
@@ -113,7 +126,30 @@ public class BNLJOperator extends JoinOperator {
          */
         private Record fetchNextRecord() {
             // TODO(proj3_part1): implement
-            return null;
+            if (leftRecord == null) {
+                return null;
+            }
+            while (true) {
+                if (rightPageIterator.hasNext()) {
+                    Record rightRecord = rightPageIterator.next();
+                    if (compare(leftRecord, rightRecord) == 0) {
+                        return leftRecord.concat(rightRecord);
+                    }
+                } else if (leftBlockIterator.hasNext()) {
+                    leftRecord = leftBlockIterator.next();
+                    rightPageIterator.reset();
+                } else if (this.rightSourceIterator.hasNext()) {
+                    fetchNextRightPage();
+                    leftBlockIterator.reset();
+                    leftRecord = leftBlockIterator.next();
+                } else if (this.leftSourceIterator.hasNext()) {
+                    fetchNextLeftBlock();
+                    rightSourceIterator.reset();
+                    fetchNextRightPage();
+                } else {
+                    return null;
+                }
+            }
         }
 
         /**
@@ -122,7 +158,9 @@ public class BNLJOperator extends JoinOperator {
          */
         @Override
         public boolean hasNext() {
-            if (this.nextRecord == null) this.nextRecord = fetchNextRecord();
+            if (this.nextRecord == null) {
+                this.nextRecord = fetchNextRecord();
+            }
             return this.nextRecord != null;
         }
 
@@ -132,7 +170,9 @@ public class BNLJOperator extends JoinOperator {
          */
         @Override
         public Record next() {
-            if (!this.hasNext()) throw new NoSuchElementException();
+            if (!this.hasNext()) {
+                throw new NoSuchElementException();
+            }
             Record nextRecord = this.nextRecord;
             this.nextRecord = null;
             return nextRecord;
